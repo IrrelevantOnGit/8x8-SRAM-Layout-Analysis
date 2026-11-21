@@ -4,7 +4,7 @@ A 64-bit (8×8) 6T SRAM designed full-custom in Cadence Virtuoso on the Generic 
 
 > **Status:** Complete. DRC clean, LVS matched, extracted-view simulation verified. Supply VDD = 1.2 V.
 
-![Top-level layout](docs/images/top_layout.png)
+![Top-level layout](docs/images/top_layout_drc.png)
 
 ---
 
@@ -122,66 +122,127 @@ Over a 10 µs hold window both the schematic and extracted runs retain the store
 ## Images
 
 ### Top Level
-![Top-level layout](docs/images/top_layout.png)
-*Final top-level layout.*
 
-![Hierarchy view](docs/images/hierarchy_view.png)
-*Hierarchy view: decoder, array, precharge, write driver, sense amp.*
+![Top-level layout — DRC clean](docs/images/top_layout_drc.png)
+*Final top-level layout of `sram_8x8` — DRC: No errors found.*
 
 ![Top-level schematic](docs/images/top_schematic.png)
-*Top-level schematic.*
+*Top-level testbench schematic (`tb_sram_8x8_ret_v3`) showing the `sram_8x8` block with all pins.*
+
+![Top-level LVS — match](docs/images/top_lvs_match.png)
+*Top-level LVS run: Schematic and Layout Match (0 net / device / pin / parameter mismatches).*
+
+![Top-level LVS Debug](docs/images/top_lvs_debug.png)
+*LVS Debug window for `sram_8x8` confirming "Schematic and Layout Match".*
+
+---
 
 ### 6T Bit Cell
-![Cell test schematic](docs/images/cell_test_schematic.png)
-*1-bit cell with precharge, write driver and sense amp.*
 
-![Cell layout](docs/images/cell_layout.png)
-*6T cell layout.*
+![6T cell layout](docs/images/cell_layout.png)
+*6T SRAM bit-cell layout (`sram6t_gen`) — DRC: No errors found.*
 
-![Cell waveforms](docs/images/cell_waveforms.png)
-*1-bit read / write waveforms.*
+![6T cell layout detail](docs/images/cell_layout_detail.png)
+*6T bit-cell layout with BL, BLB and WL pin labels visible.*
 
-![Hold SNM](docs/images/hold_snm.png)
-*Hold static noise margin.*
+![Cell LVS — match](docs/images/cell_lvs_match.png)
+*Cell-level LVS run for `sram6t_gen`: Schematic and Layout Match.*
+
+![Cell LVS Debug](docs/images/cell_lvs_debug.png)
+*LVS Debug for `sram6t_gen` — no mismatches.*
+
+---
+
+### 8×8 Array
+
+![8×8 array layout — DRC](docs/images/array_layout_drc.png)
+*8×8 tiled bit-cell array (`sram_array_8x8`) — DRC: No errors found.*
+
+![8×8 array LVS — match](docs/images/array_lvs_match.png)
+*Array-level LVS for `sram_array_8x8`: Schematic and Layout Match.*
+
+---
 
 ### Peripheral Circuits
-| Schematic | Layout |
+
+#### Precharge
+
+![Precharge layout — DRC](docs/images/precharge_layout_drc.png)
+*Precharge circuit layout — DRC: No errors found.*
+
+#### Write Driver
+
+| Schematic | Layout — DRC clean |
 |---|---|
-| ![Precharge schematic](docs/images/precharge_schematic.png) | ![Precharge layout](docs/images/precharge_layout.png) |
-| ![Write driver schematic](docs/images/write_driver_schematic.png) | ![Write driver layout](docs/images/write_driver_layout.png) |
-| ![Sense amp schematic](docs/images/sense_amp_schematic.png) | ![Sense amp layout](docs/images/sense_amp_layout.png) |
+| ![Write driver schematic](docs/images/write_driver_schematic.png) | ![Write driver layout](docs/images/write_driver_layout_drc.png) |
+
+*Write driver symbol schematic (left); write driver layout with DRC: No errors (right).*
+
+![Write driver LVS Debug](docs/images/write_driver_lvs_debug.png)
+*Write driver LVS Debug: Schematic and Layout Match.*
+
+#### Sense Amplifier
+
+| Schematic | Layout — LVS match |
+|---|---|
+| ![Sense amp schematic](docs/images/sense_amp_schematic.png) | ![Sense amp layout](docs/images/sense_amp_layout_lvs.png) |
+
+*Sense amp symbol schematic (left); sense amp layout with LVS: Schematic and Layout Match (right).*
+
+![Sense amp LVS Debug](docs/images/sense_amp_lvs_debug.png)
+*Sense amp LVS Debug: Schematic and Layout Match.*
+
+---
 
 ### Row Decoder
-![Decoder layout](docs/images/decoder_layout.png)
-*3-to-8 row decoder layout.*
 
-![Decoder truth table](docs/images/decoder_truth_table.png)
-![Decoder inputs](docs/images/decoder_inputs.png)
-![Decoder waveforms](docs/images/decoder_waveforms.png)
-*Truth table, address / enable inputs and one-hot word-line outputs.*
+| Schematic | Layout — DRC clean |
+|---|---|
+| ![Decoder schematic](docs/images/decoder_schematic.png) | ![Decoder layout](docs/images/decoder_layout_drc.png) |
 
-### Physical Verification
-![Extracted view](docs/images/av_extracted_view.png)
-*Extracted view of the full array.*
+*3-to-8 row decoder schematic (left); decoder layout with DRC: No errors (right).*
 
-![LVS match](docs/images/lvs_match.png)
-*LVS: schematic and layout match.*
+![Decoder LVS — match](docs/images/decoder_lvs_match.png)
+*Decoder LVS: Schematic and Layout Match.*
 
-### Simulation
-![Functional waveforms](docs/images/functional_waveforms.png)
-*Functional read / write on all 8 outputs.*
+![Decoder LVS Debug](docs/images/decoder_lvs_debug.png)
+*Decoder LVS Debug window: Schematic and Layout Match.*
 
-![Pre-layout read/write](docs/images/prelayout_read_write.png)
-*Pre-layout read / write.*
+---
 
-![Post-layout read/write](docs/images/postlayout_read_write.png)
-*Post-layout (extracted) read / write.*
+### Physical Verification — Top Level
 
-![Pre-layout hold](docs/images/prelayout_hold.png)
-*Pre-layout bit hold.*
+![Top-level DRC — clean](docs/images/top_layout_drc.png)
+*Top-level DRC on `sram_8x8`: No DRC errors found (after all fills applied).*
 
-![Post-layout hold](docs/images/postlayout_hold.png)
-*Post-layout (extracted) bit hold.*
+![Top-level LVS — match](docs/images/top_lvs_match.png)
+*Top-level LVS summary: 0 net mismatches, 0 device mismatches, 0 pin mismatches.*
+
+![Top-level LVS Debug](docs/images/top_lvs_debug.png)
+*LVS Debug for `sram_8x8` — "Schematic and Layout Match".*
+
+---
+
+### Extracted (Parasitic) View
+
+![Extracted view — Virtuoso](docs/images/av_extracted_virtuoso.png)
+*Extracted view of the full `sram_8x8` array open in Cadence Virtuoso (av_extracted cellview).*
+
+![Extracted view — parasitics](docs/images/av_extracted_view.png)
+*Full parasitic-extracted view showing Metal1–Metal6 routing with RC parasitics overlaid.*
+
+---
+
+### Simulation — Bit Hold
+
+![Pre-layout bit hold](docs/images/prelayout_hold.png)
+*Pre-layout bit retention over 10 µs: all 8 outputs hold their stored values stably.*
+
+![Post-layout bit hold](docs/images/postlayout_hold.png)
+*Post-layout (extracted) bit hold: outputs remain valid; gradual decay begins around 5.2 µs due to parasitic leakage.*
+
+![Post-layout bit hold (run 2)](docs/images/postlayout_hold2.png)
+*Post-layout bit hold simulation — alternative run confirming decay profile.*
 
 ---
 
